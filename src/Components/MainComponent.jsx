@@ -6,6 +6,13 @@ export default class MainComponent extends Component {
 
         this.state = {
             name : "dilshan",
+            LObj:{
+                id:null,
+                fname:null,
+                lname:null,
+                age:null
+            },
+
             ListC : [
                 {fname : 'dilshan' , lname : 'Fernando' , age : 23 , id:1},
                 {fname : 'Hasitha' , lname : 'Fernando' , age : 20 , id:2},
@@ -35,19 +42,50 @@ export default class MainComponent extends Component {
 
     submit = (e) =>{
         e.preventDefault()
-        console.log(this.state.name + '  ' + this.state.email);
+        // console.log(this.state.name + '  ' + this.state.email);
         
     }
-    
-   
-    
-     
 
+    LObjss = (e) =>{
+        const {name , value} = e.target
+            this.setState(prevState=>({
+                LObj : {
+                    ...prevState.LObj,
+                    [name] : value   
+                }
+            }))
+    }
+    addlist = (e) => {
+        let d = this.state.LObj
+        e.preventDefault()
+        // console.log(this.state.ListC);
+        d.id = Math.random()*100
+        const ListCx = [...this.state.ListC ,d ]
+        
+        
+        this.setState({
+            ListC:ListCx
+        })
+        // console.log(this.state.ListC);
+    }
+    deleteEle = (id) =>{
+
+        let filtered = this.state.ListC.filter(x => {
+            return x.id != id 
+        })
+
+        this.setState({
+            ListC : filtered
+        })
+           
+    }
+    
+  
     render() {
         const dList = this.state.ListC.map((x)=>{
             return x.age > 20 ? (
                 <div key={x.id}>
-                    <li>{JSON.stringify(x)}</li>
+                    <li>{x.fname} <button className="btn btn-danger btn-sm" onClick={this.deleteEle.bind(this , x.id)}>Del</button></li>
                 </div>
             ) : null
         }
@@ -66,8 +104,19 @@ export default class MainComponent extends Component {
                         <button className="btn btn-primary">submit</button>
                     </form>
                 </div>
-                    <button className="btn btn-primary">cl</button> 
-               
+
+                <div>
+                    {JSON.stringify(this.state.LObj)}
+                    <form onSubmit={this.addlist}>
+                        <input name="fname" onChange={this.LObjss} placeholder="enter your fname" type="text"/>
+                        <input name="lname" onChange={this.LObjss} placeholder="enter your lname" type="text"/>
+                        <input name="age" onChange={this.LObjss} placeholder="enter your age" type="number"/>
+                        <button className="btn btn-primary">submit</button>
+                    </form>
+                </div>
+                    <button className="btn btn-primary"  >cl</button> 
+              
+               {this.state.name}
                    {dList}
             </div>
         )
